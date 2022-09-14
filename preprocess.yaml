@@ -1,7 +1,7 @@
 dataset: 'paimon_22050'
 
 path:
-  corpus_path: '/content/wavegrad2-Paimon/paimon_22050
+  corpus_path: '/content/wavegrad2-Paimon/paimon_22050'
   lexicon_path: '/content/wavegrad2-Paimon/lexicon/pinyin-lexicon-r.txt'
   raw_path: '/content/wavegrad2-Paimon/raw_data/paimon_22050'
   preprocessed_path: '/content/wavegrad2-Paimon/preprocessed_data/paimon_22050'
