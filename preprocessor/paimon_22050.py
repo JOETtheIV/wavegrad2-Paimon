@@ -18,11 +18,11 @@ def prepare_align(hparams):
     cleaners = hparams.preprocessing.text.text_cleaners
     language = Language(hparams.preprocessing.text.lang, cleaners)
     speaker = "Paimon"
-    with open(os.path.join(in_dir, "metadata.csv"), encoding="utf-8") as f:
+    with open(os.path.join(in_dir, "train_filelists.txt"), encoding="utf-8") as f:
         for line in tqdm(f):
             parts = line.strip().split("|")
-            base_name = parts[0]
-            text = parts[2]
+            base_name = parts[0].split('/')[1].split('.')[0]
+            text = parts[1]
             text = language._clean_text(text, cleaners)
 
             wav_path = os.path.join(in_dir, "wavs", "{}.wav".format(base_name))
