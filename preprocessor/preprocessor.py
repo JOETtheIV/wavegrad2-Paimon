@@ -70,17 +70,18 @@ class Preprocessor:
 
         # Get alignments
         textgrid = tgt.io.read_textgrid(tg_path)
-        phone, duration, start, end = self.get_alignment(
-            textgrid.get_tier_by_name("phones")
+        phone, duration, start_time, end_time = self.get_alignment(
+            textgrid.get_tier_by_name("words")
         )
+        
         text = "{" + " ".join(phone) + "}"
-        if start >= end:
+        if start_time >= end_time:
             return None
 
         # Read and trim wav files
         wav, _ = librosa.load(wav_path)
         wav = wav[
-            int(self.sampling_rate * start) : int(self.sampling_rate * end)
+            int(self.sampling_rate * start_time) : int(self.sampling_rate * end_time)
         ].astype(np.float32)
 
         # Read raw text
@@ -92,7 +93,7 @@ class Preprocessor:
         dur_filename = "{}-duration-{}.npy".format(speaker, basename)
         np.save(os.path.join(self.out_dir, "duration", dur_filename), duration)
 
-        wav_filename = "{}-wav-{}.wav".format(speaker, basename)
+        wav_filename = "{}.wav".format(basename)
         wavfile.write(
             os.path.join(self.out_dir, "wav", wav_filename),
             self.sampling_rate,
@@ -114,7 +115,6 @@ class Preprocessor:
         end_idx = 0
         for t in tier._objects:
             s, e, p = t.start_time, t.end_time, t.text
-
             # Trim leading silences
             if phones == []:
                 if p in sil_phones:
