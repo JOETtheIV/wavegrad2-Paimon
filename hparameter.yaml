@@ -13,14 +13,14 @@ train:
     dur: 1.0
 
 data:
-  lang: 'eng'
-  text_cleaners: ['english_cleaners'] # korean_cleaners, english_cleaners, chinese_cleaners
-  speakers: ['LJSpeech']
-  train_dir: 'preprocessed_data/LJSpeech'
+  lang: 'cht'
+  text_cleaners: ['chinese_cleaners'] # korean_cleaners, english_cleaners, chinese_cleaners
+  speakers: ['Paimon']
+  train_dir: 'preprocessed_data/paimon_22050'
   train_meta: 'train.txt'  # relative path of metadata file from train_dir
-  val_dir: 'preprocessed_data/LJSpeech'
+  val_dir: 'preprocessed_data/paimon_22050'
   val_meta: 'val.txt'  # relative path of metadata file from val_dir'
-  lexicon_path: 'lexicon/librispeech-lexicon.txt'
+  lexicon_path: 'lexicon/pinyin-lexicon-r.txt'
 
 audio:
   n_mel_channels: 80
