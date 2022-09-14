@@ -29,26 +29,24 @@ class Preprocessor:
         n_frames = 0
 
         # Compute duration
-        speakers = {}
-        for i, speaker in enumerate(tqdm(os.listdir(self.in_dir))):
-            speakers[speaker] = i
-            for wav_name in os.listdir(os.path.join(self.in_dir, speaker)):
-                if ".wav" not in wav_name:
+        speaker = 'Paimon'
+        for wav_name in os.listdir(os.path.join(self.in_dir, speaker)):
+            if ".wav" not in wav_name:
+                continue
+
+            basename = wav_name.split(".")[0]
+            tg_path = os.path.join(
+                self.out_dir, "TextGrid", speaker, "{}.TextGrid".format(basename)
+            )
+            if os.path.exists(tg_path):
+                ret = self.process_utterance(speaker, basename)
+                if ret is None:
                     continue
+                else:
+                    info, n = ret
+                out.append(info)
 
-                basename = wav_name.split(".")[0]
-                tg_path = os.path.join(
-                    self.out_dir, "TextGrid", speaker, "{}.TextGrid".format(basename)
-                )
-                if os.path.exists(tg_path):
-                    ret = self.process_utterance(speaker, basename)
-                    if ret is None:
-                        continue
-                    else:
-                        info, n = ret
-                    out.append(info)
-
-                n_frames += n
+            n_frames += n
 
         # Save files
         with open(os.path.join(self.out_dir, "speakers.json"), "w") as f:
@@ -63,13 +61,6 @@ class Preprocessor:
         random.shuffle(out)
         out = [r for r in out if r is not None]
 
-        # Write metadata
-        with open(os.path.join(self.out_dir, "train.txt"), "w", encoding="utf-8") as f:
-            for m in out[self.val_size :]:
-                f.write(m + "\n")
-        with open(os.path.join(self.out_dir, "val.txt"), "w", encoding="utf-8") as f:
-            for m in out[: self.val_size]:
-                f.write(m + "\n")
 
         return out
 
