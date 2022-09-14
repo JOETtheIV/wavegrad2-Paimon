@@ -8,7 +8,7 @@ train:
     start: 25000
     end: 100000
   num_workers: 16
-  gpus: 2 #ddp
+  gpus: 1 
   loss_rate:
     dur: 1.0
 
