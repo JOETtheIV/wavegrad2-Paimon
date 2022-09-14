@@ -4,13 +4,13 @@ import argparse
 
 from omegaconf import OmegaConf as OC
 
-from preprocessor import ljspeech
+from preprocessor import paimon_22050
 
 
 def main(args):
     hparams = OC.load(args.config)
-    if "LJSpeech" in hparams.dataset:
-        ljspeech.prepare_align(hparams)
+    if "paimon_22050" in hparams.dataset:
+        paimon_22050.prepare_align(hparams)
 
 
 if __name__ == "__main__":
