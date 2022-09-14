@@ -30,27 +30,24 @@ class Preprocessor:
 
         # Compute duration
         speaker = 'Paimon'
-        for wav_name in os.listdir(os.path.join(self.in_dir, speaker)):
-            if ".wav" not in wav_name:
+        for wav_name in os.listdir('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon'):
+          if ".wav" not in wav_name:
+              continue
+          basename = wav_name.split(".")[0]
+          tg_path = os.path.join(
+              '/content/wavegrad2-Paimon/preprocessed_data/x/Paimon/TextGrid', "{}.TextGrid".format(basename)
+          )
+          if os.path.exists(tg_path):
+            ret = self.process_utterance(speaker, basename)
+            if ret is None:
                 continue
+            else:
+                info, n = ret
+            out.append(info)
 
-            basename = wav_name.split(".")[0]
-            tg_path = os.path.join(
-                self.out_dir, "TextGrid", speaker, "{}.TextGrid".format(basename)
-            )
-            if os.path.exists(tg_path):
-                ret = self.process_utterance(speaker, basename)
-                if ret is None:
-                    continue
-                else:
-                    info, n = ret
-                out.append(info)
-
-            n_frames += n
+          n_frames += n
 
         # Save files
-        with open(os.path.join(self.out_dir, "speakers.json"), "w") as f:
-            f.write(json.dumps(speakers))
 
         print(
             "Total time: {} hours".format(
@@ -65,10 +62,10 @@ class Preprocessor:
         return out
 
     def process_utterance(self, speaker, basename):
-        wav_path = os.path.join(self.in_dir, speaker, "{}.wav".format(basename))
-        text_path = os.path.join(self.in_dir, speaker, "{}.lab".format(basename))
+        wav_path = os.path.join('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.wav".format(basename))
+        text_path = os.path.join('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.lab".format(basename))
         tg_path = os.path.join(
-            self.out_dir, "TextGrid", speaker, "{}.TextGrid".format(basename)
+            '/content/wavegrad2-Paimon/preprocessed_data/x/Paimon/TextGrid', "{}.TextGrid".format(basename)
         )
 
         # Get alignments
@@ -89,6 +86,7 @@ class Preprocessor:
         # Read raw text
         with open(text_path, "r") as f:
             raw_text = f.readline().strip("\n")
+            print(raw_text)
 
         # Save files
         dur_filename = "{}-duration-{}.npy".format(speaker, basename)
