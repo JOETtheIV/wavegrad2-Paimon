@@ -1,10 +1,10 @@
-dataset: 'LJSpeech'
+dataset: 'paimon_22050'
 
 path:
-  corpus_path: '/DATA1/minds/resources/tts/LJSpeech-1.1'
-  lexicon_path: 'lexicon/librispeech-lexicon.txt'
-  raw_path: './raw_data/LJSpeech'
-  preprocessed_path: './preprocessed_data/LJSpeech'
+  corpus_path: '/content/wavegrad2-Paimon/paimon_22050
+  lexicon_path: '/content/wavegrad2-Paimon/lexicon/pinyin-lexicon-r.txt'
+  raw_path: '/content/wavegrad2-Paimon/raw_data/paimon_22050'
+  preprocessed_path: '/content/wavegrad2-Paimon/preprocessed_data/paimon_22050'
 
 preprocessing:
   val_size: 512
