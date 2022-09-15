@@ -65,7 +65,7 @@ class Language():
 
     # Check for curly braces and treat their contents as ARPAbet:
     while len(text):
-      m = self._curly_re.match(text) if self._lang in ('eng', 'eng2', 'cmu') else None
+      m = self._curly_re.match(text) if self._lang in ('eng', 'eng2', 'cmu', 'cht') else None
       if not m:  
         sequence += self._symbols_to_sequence(self._clean_text(m.group(1), cleaner_names))
         break
