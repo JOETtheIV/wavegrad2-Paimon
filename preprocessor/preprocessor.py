@@ -30,12 +30,12 @@ class Preprocessor:
 
         # Compute duration
         speaker = 'Paimon'
-        for wav_name in os.listdir('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon'):
+        for wav_name in os.listdir('/content/wavegrad2-Paimon/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon'):
           if ".wav" not in wav_name:
               continue
           basename = wav_name.split(".")[0]
           tg_path = os.path.join(
-              '/content/wavegrad2-Paimon/preprocessed_data/x/Paimon/TextGrid', "{}.TextGrid".format(basename)
+              '/content/wavegrad2-Paimon/root/Documents/MFA/my_corpus_aligned', "{}.TextGrid".format(basename)
           )
           if os.path.exists(tg_path):
             ret = self.process_utterance(speaker, basename)
@@ -57,21 +57,29 @@ class Preprocessor:
 
         random.shuffle(out)
         out = [r for r in out if r is not None]
+        
+        with open(os.path.join(self.out_dir, "train.txt"), "w", encoding="utf-8") as f:
+            for m in out[self.val_size :]:
+                f.write(m + "\n")
+        with open(os.path.join(self.out_dir, "val.txt"), "w", encoding="utf-8") as f:
+            for m in out[: self.val_size]:
+                f.write(m + "\n")
+
 
 
         return out
 
     def process_utterance(self, speaker, basename):
-        wav_path = os.path.join('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.wav".format(basename))
-        text_path = os.path.join('/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.lab".format(basename))
+        wav_path = os.path.join('/content/wavegrad2-Paimon/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.wav".format(basename))
+        text_path = os.path.join('/content/wavegrad2-Paimon/content/wavegrad2-Paimon/raw_data/paimon_22050/Paimon', "{}.lab".format(basename))
         tg_path = os.path.join(
-            '/content/wavegrad2-Paimon/preprocessed_data/x/Paimon/TextGrid', "{}.TextGrid".format(basename)
+            '/content/wavegrad2-Paimon/root/Documents/MFA/my_corpus_aligned', "{}.TextGrid".format(basename)
         )
 
         # Get alignments
         textgrid = tgt.io.read_textgrid(tg_path)
         phone, duration, start_time, end_time = self.get_alignment(
-            textgrid.get_tier_by_name("words")
+            textgrid.get_tier_by_name("phones")
         )
         
         text = "{" + " ".join(phone) + "}"
