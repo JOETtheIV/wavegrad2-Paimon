@@ -122,6 +122,7 @@ def chinese_cleaners(text):
     )
   ]
   text = "".join(text)
+  text = text+'  '
   return text
 
 def japanese_romaji_cleaners(text):
