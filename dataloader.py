@@ -47,7 +47,7 @@ class TextAudioDataset(Dataset):
             idx = torch.multinomial(self.mapping_weights, 1).item()
 
         basename, spk_id, text, raw_text = self.meta[idx]
-        audio_path = os.path.join(self.data_dir, 'wav', '{}-wav-{}.wav'.format(spk_id, basename))
+        audio_path = os.path.join(self.data_dir, 'wav', '{}.wav'.format(basename))
         wav, _ = librosa.load(audio_path, self.hparams.audio.sample_rate)
         wav = torch.from_numpy(wav)
         text_norm = self.get_text(text)
