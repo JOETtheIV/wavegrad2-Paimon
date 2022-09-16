@@ -101,11 +101,25 @@ def create_dataloader(hparams, cv):
         input_lengths, ids_sorted_decreasing = torch.sort(
             torch.LongTensor([len(x[0]) for x in batch]),
             dim=0, descending=True)
+        input_lengths2, ids_sorted_decreasing1 = torch.sort(
+            torch.LongTensor([len(x[2]) for x in batch]),
+            dim=0, descending=True)
         max_input_len = torch.empty(len(batch), dtype=torch.long)
         max_input_len.fill_(input_lengths[0])
 
+
+        max_input_len2 = torch.empty(len(batch), dtype=torch.long)
+        max_input_len2.fill_(input_lengths2[0])
+
+
+        # print("input_len[0]", max_input_len.fill_(input_lengths[0]))
+        # print("input_len[2]", max_input_len.fill_(input_lengths2[0]))
+
+
         text_padded = torch.zeros((len(batch), max_input_len[0]), dtype=torch.long)
         max_target_len = max([x[1].size(0) for x in batch])
+   
+
         if max_target_len % hparams.window.scale != 0:
             max_target_len = max_target_len + (hparams.window.scale - max_target_len % hparams.window.scale)
 
@@ -113,7 +127,7 @@ def create_dataloader(hparams, cv):
         output_lengths = torch.empty(len(batch), dtype=torch.long)
         speakers = torch.empty(len(batch), dtype=torch.long)
 
-        duration_padded = torch.zeros((len(batch), max_input_len[0]), dtype=torch.long)
+        duration_padded = torch.zeros((len(batch), max_input_len2[0]), dtype=torch.long)
 
         for idx, key in enumerate(ids_sorted_decreasing):
             text = batch[key][0]
@@ -121,7 +135,13 @@ def create_dataloader(hparams, cv):
             wav = batch[key][1]
             wav_padded[idx, :wav.size(0)] = wav
             duration = batch[key][2]
+
+            # print(duration.size(0))
+            # print("max_target_len2",max_target_len2)
+            print(duration_padded[idx, :duration.size(0)].size(0), duration.size(0))
             duration_padded[idx, :duration.size(0)] = duration
+
+        
             output_lengths[idx] = wav.size(0) // hparams.window.scale
             speakers[idx] = batch[key][3]
 
