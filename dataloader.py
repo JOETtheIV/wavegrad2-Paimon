@@ -138,7 +138,7 @@ def create_dataloader(hparams, cv):
 
             # print(duration.size(0))
             # print("max_target_len2",max_target_len2)
-            print(duration_padded[idx, :duration.size(0)].size(0), duration.size(0))
+            # print(duration_padded[idx, :duration.size(0)].size(0), duration.size(0))
             duration_padded[idx, :duration.size(0)] = duration
 
         
