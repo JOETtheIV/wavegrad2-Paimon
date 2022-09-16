@@ -59,7 +59,7 @@ class RangeParameterPredictor(nn.Module):
         # x: [B, N, (chn.encoder + chn.speaker)]
         # duration: [B, N]
         duration = duration.view(x.size(0), x.size(1), -1)
-        x = torch.cat((x, duration.unsqueeze(-1)), dim=-1)
+        x = torch.cat((x, duration), dim=-1)
         # [B, N, (chn.encoder + chn.speaker) + 1]
 
         input_lengths = input_lengths.cpu().numpy()
